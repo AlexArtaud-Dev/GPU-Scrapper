@@ -1,6 +1,6 @@
 const router = require('express').Router();
 require('dotenv').config();
-const { User } = require("../models/models");
+const { User } = require("../database/models/models");
 
 
 /**
@@ -67,4 +67,6 @@ router.get('/secure/:id', async(req, res) => {
         username: user.username,
     });
 })
+
+
 module.exports = router;

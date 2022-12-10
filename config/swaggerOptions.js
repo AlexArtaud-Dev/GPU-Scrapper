@@ -1,20 +1,20 @@
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title: "OPENAPI TEMPLATE API",
+            title: "Gpu Scrapping API",
             contact : {
                 name: "Undefined"
             },
             version: "Alpha 1.0.0",
-            servers: ["https://localhost:5000"]
+            servers: ["https://localhost:3000"]
         },
         basePath: "/api",
         paths : {},
         securityDefinitions: {
             Bearer: {
                 in: "header",
-                name: "auth-token",
-                description: "This token is needed to use logged in features",
+                name: "Authorization",
+                description: "This token is needed to use all the features of the API",
                 required: true,
                 type: "apiKey",
             }
