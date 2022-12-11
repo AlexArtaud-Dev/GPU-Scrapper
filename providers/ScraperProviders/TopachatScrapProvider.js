@@ -13,7 +13,7 @@ class TopachatScrapProvider extends BaseScrapProvider {
         this.startProcessing();
         console.log("Scrapping Topachat : " + Object.keys(links).length + " links");
         const puppeteer = require("puppeteer");
-        puppeteer.launch({ headless: true, args: ["--no-sandbox"] }).then(async browser => {
+        puppeteer.launch({ headless: true, args: ['--no-sandbox', "--disabled-setupid-sandbox"] }).then(async browser => {
             const page = await browser.newPage();
             const failedLinks = [];
             for (const key in links) {
