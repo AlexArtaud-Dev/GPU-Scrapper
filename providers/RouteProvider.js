@@ -41,14 +41,20 @@ class RouteProvider {
 
     startsServer() {
       const port = this.port;
-        https.createServer({
-          key: fs.readFileSync(this.serverKeyPath),
-          cert: fs.readFileSync(this.serverCertPath)
-        }, this.app)
-            .listen(port, function () {
-              console.log(`${ts.toLocaleString()} - App listening on port ${port}! Go to https://localhost:${port}/v1/swagger`)
-              if (this.openInBrowser) open(`https://localhost:${port}/v1/swagger`, {app: 'firefox'});
-        })
+      // run the server using http
+        this.app.listen(port, function () {
+                console.log(`${ts.toLocaleString()} - App listening on port ${port}! Go to https://localhost:${port}/v1/swagger`)
+                if (this.openInBrowser) open(`https://localhost:${port}/v1/swagger`, {app: 'firefox'});
+            })
+
+        // https.createServer({
+        //   key: fs.readFileSync(this.serverKeyPath),
+        //   cert: fs.readFileSync(this.serverCertPath)
+        // }, this.app)
+        //     .listen(port, function () {
+        //       console.log(`${ts.toLocaleString()} - App listening on port ${port}! Go to https://localhost:${port}/v1/swagger`)
+        //       if (this.openInBrowser) open(`https://localhost:${port}/v1/swagger`, {app: 'firefox'});
+        // })
     }
 
     countRoutes() {
