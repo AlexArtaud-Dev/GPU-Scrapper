@@ -11,7 +11,7 @@ const scrapingSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    creationDate: {
+    updatedAt: {
         type: Date,
         default: (Date.now())
     },

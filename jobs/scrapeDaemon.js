@@ -21,6 +21,5 @@ module.exports = {
         topachatScrapProvider.checkIfIsProcessing().then((isProcessing) => {
             if (!isProcessing) topachatScrapProvider.run();
         });
-        topachatScrapProvider.run();
     }
 }

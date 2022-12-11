@@ -1,11 +1,10 @@
 const BaseScrapProvider = require("./BaseScrapProvider");
 const links = require("../../config/scraper/topachat/links");
-const puppeteer = require("puppeteer");
-const {GPU, Scraping} = require("../../database/models/models");
+const {GPU} = require("../../database/models/models");
 
 class TopachatScrapProvider extends BaseScrapProvider {
     constructor() {
-        super();
+        super("topachat");
     }
 
     run() {
@@ -16,11 +15,13 @@ class TopachatScrapProvider extends BaseScrapProvider {
         const puppeteer = require("puppeteer");
         puppeteer.launch({ headless: true }).then(async browser => {
             const page = await browser.newPage();
+            const failedLinks = [];
             for (const key in links) {
                 try {
                     await this.scrap(links[key], page);
                     this.scrappedNumber++;
                 }catch (e) {
+                    failedLinks.push(links[key]);
                     console.log(e.message);
                 }
             }
@@ -29,6 +30,10 @@ class TopachatScrapProvider extends BaseScrapProvider {
                 console.log(" -> Success");
             }else {
                 console.log(" -> Failed (" + this.scrappedNumber + "/" + Object.keys(links).length + ")");
+                console.log(" -> Failed links : ");
+                for (const failedLink of failedLinks) {
+                    console.log(" -> " + failedLink.name + " : " + failedLink.url);
+                }
             }
             this.stopProcessing();
         });
@@ -50,7 +55,7 @@ class TopachatScrapProvider extends BaseScrapProvider {
 
         for (const item of items) {
             const gpu = new GPU({
-                website: "topachat",
+                website: this.webSite,
                 ref: name,
                 name: item.name,
                 price: parseInt(item.price.replace("€", "")),
@@ -61,45 +66,7 @@ class TopachatScrapProvider extends BaseScrapProvider {
         }
     }
 
-    async startProcessing() {
-        const scraping = await Scraping.findOne({website: "topachat"});
-        scraping.processing = true;
-        await scraping.save();
-    }
 
-    async stopProcessing() {
-        const scraping = await Scraping.findOne({website: "topachat"});
-        scraping.processing = false;
-        await scraping.save();
-    }
-
-    deleteAll() {
-        GPU.deleteMany({website: this.name}, function(err) {
-            if (err) {
-                console.log(err);
-            }
-        });
-    }
-
-    async createProcessingInfoIfNoExist() {
-        const scraping = await Scraping.findOne({website: "topachat"});
-        if (!scraping) {
-            const scraping = new Scraping({
-                website: "topachat",
-                processing: false,
-            });
-            await scraping.save();
-        }
-    }
-
-    async checkIfIsProcessing() {
-        await this.createProcessingInfoIfNoExist();
-        const scraping = await Scraping.findOne({website: "topachat"});
-        if (scraping.processing) {
-            console.log("Topachat is already processing");
-            return true;
-        }
-    }
 }
 
 module.exports = TopachatScrapProvider;
