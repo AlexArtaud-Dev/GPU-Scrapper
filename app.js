@@ -21,13 +21,13 @@ try{
 }
 
 setTimeout(() => {
-    setInterval(() => {
+    // setInterval(() => {
         try {
             runAllScrapes();
         }catch (e) {
             console.log(e.message);
         }
-    }, 1800000);
+    // }, 1800000);
 }, 5000)
 
 
