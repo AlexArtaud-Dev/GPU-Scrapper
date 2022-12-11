@@ -1,5 +1,5 @@
+const LogProvider = require("./LogProvider");
 require('dotenv').config();
-const ts = new Date();
 
 class MongooseProvider {
     constructor(DB_CONNECTION_STRING) {
@@ -13,7 +13,7 @@ class MongooseProvider {
         this.mongoose.connect(this.DB_CONNECTION_STRING, this.config);
         this.mongoose.Promise = global.Promise;
         this.mongoose.connection.on("connected", () => {
-            console.log(ts.toLocaleString() + " - Connected to Mongo Cluster (" + this.mongoose.connection.host + ")");
+            LogProvider.log("Connected to Mongo Cluster (" + this.mongoose.connection.host + ")")
         });
     }
 }

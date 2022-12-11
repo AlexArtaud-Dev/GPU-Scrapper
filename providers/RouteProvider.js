@@ -6,6 +6,7 @@ const ts = new Date();
 const fs = require('fs');
 const express = require("express");
 const SwaggerProvider = require("./SwaggerProvider");
+const LogProvider = require("./LogProvider");
 
 class RouteProvider {
     constructor(port = 3000, openInBrowser = false, serverKeyPath, serverCertPath) {
@@ -22,20 +23,20 @@ class RouteProvider {
 
     loadRoutes(stackTrace = false) {
       let loadedRoutes = 0;
-      if (stackTrace) console.log("Loading routes (" + this.countRoutes() + ") :");
+      if (stackTrace) LogProvider.log("Loading routes (" + this.countRoutes() + ")");
         for (const route in routeConfig) {
-            if (stackTrace) console.log(" * Loading route: " + route + " ...");
+            if (stackTrace) LogProvider.log("Loading route: " + route + " ...");
             try {
               const {routeUrlPath, filePath} = routeConfig[route];
               const routeFile = require(filePath);
               this.app.use(routeUrlPath, routeFile);
-              if (stackTrace) console.log(" -> Loaded !");
+              if (stackTrace) LogProvider.log("Loaded !");
               loadedRoutes++;
             }catch (e) {
-              if (stackTrace) console.log(" -> Failed !");
+              if (stackTrace) LogProvider.log("Failed !");
             }
         }
-      if (stackTrace) console.log(loadedRoutes + " routes loaded !");
+      if (stackTrace) LogProvider.log(loadedRoutes + " routes loaded !");
       else console.clear();
     }
 
@@ -43,7 +44,7 @@ class RouteProvider {
       const port = this.port;
       // run the server using http
         this.app.listen(port, function () {
-                console.log(`${ts.toLocaleString()} - App listening on port ${port}! Go to https://localhost:${port}/v1/swagger`)
+            LogProvider.log(`App listening on port ${port}! Go to https://localhost:${port}/v1/swagger`)
                 if (this.openInBrowser) open(`https://localhost:${port}/v1/swagger`, {app: 'firefox'});
             })
 

@@ -1,4 +1,5 @@
 const {Scraping, GPU} = require("../../database/models/models");
+const LogProvider = require("../LogProvider");
 
 class BaseScrapProvider {
     constructor(website) {
@@ -61,7 +62,7 @@ class BaseScrapProvider {
                 return false;
             }else {
                 const webSiteName = this.webSite.charAt(0).toUpperCase() + this.webSite.slice(1);
-                console.log(`${webSiteName} is already processing`);
+                LogProvider.log(`${webSiteName} is already processing`);
                 return true;
             }
         }

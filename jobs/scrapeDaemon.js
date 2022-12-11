@@ -1,3 +1,4 @@
+const LogProvider = require("../providers/LogProvider");
 module.exports = {
     runSpecificScrape (context) {
         switch (context) {
@@ -11,7 +12,7 @@ module.exports = {
                 });
                 break;
             default:
-                console.log("No context provided");
+                LogProvider.log("No context provided");
                 break;
         }
     },

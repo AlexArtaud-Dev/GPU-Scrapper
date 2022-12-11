@@ -1,6 +1,7 @@
 const BaseScrapProvider = require("./BaseScrapProvider");
 const links = require("../../config/scraper/topachat/links");
 const {GPU} = require("../../database/models/models");
+const LogProvider = require("../LogProvider");
 
 class TopachatScrapProvider extends BaseScrapProvider {
     constructor() {
@@ -11,7 +12,7 @@ class TopachatScrapProvider extends BaseScrapProvider {
         this.checkIfIsProcessing();
         this.deleteAll();
         this.startProcessing();
-        console.log("Scrapping Topachat : " + Object.keys(links).length + " links");
+        LogProvider.log("Scrapping Topachat  (" + Object.keys(links).length + " links)");
         const puppeteer = require("puppeteer");
         puppeteer.launch({ headless: true, args: ['--no-sandbox', "--disabled-setupid-sandbox"] }).then(async browser => {
             const page = await browser.newPage();
@@ -27,12 +28,12 @@ class TopachatScrapProvider extends BaseScrapProvider {
             }
             await browser.close();
             if (this.scrappedNumber === Object.keys(links).length) {
-                console.log(" -> Success");
+                LogProvider.log("Success in scrapping Topachat");
             }else {
-                console.log(" -> Failed (" + this.scrappedNumber + "/" + Object.keys(links).length + ")");
-                console.log(" -> Failed links : ");
+                LogProvider.log("Failed (" + this.scrappedNumber + "/" + Object.keys(links).length + ")");
+                LogProvider.log("Failed links : ");
                 for (const failedLink of failedLinks) {
-                    console.log(" -> " + failedLink.name + " : " + failedLink.url);
+                    LogProvider.log(failedLink.name + " : " + failedLink.url);
                 }
             }
             this.stopProcessing();
